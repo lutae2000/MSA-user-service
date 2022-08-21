@@ -15,19 +15,22 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
+    private UserService userService;
+    private Environment env;
+
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         try {
-            RequestLogin cred = new ObjectMapper().readValue(request.getInputStream(), RequestLogin.class);
-            //로그인시 이메일과 패스워드로 검증
+            RequestLogin creds = new ObjectMapper().readValue(request.getInputStream(), RequestLogin.class);
+
             return getAuthenticationManager().authenticate(
                     new UsernamePasswordAuthenticationToken(
-                            cred.getEmail(),
-                            cred.getPassword(),
+                            creds.getEmail(),
+                            creds.getPassword(),
                             new ArrayList<>()
                     )
             );
-        } catch (IOException e) {
+        } catch(IOException e) {
             throw new RuntimeException(e);
         }
     }

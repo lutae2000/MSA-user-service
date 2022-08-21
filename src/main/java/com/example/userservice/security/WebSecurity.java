@@ -33,8 +33,10 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
         //http.authorizeRequests().antMatchers("/**").permitAll();
         //서비스 접근시 인증된것만 허용한다
         http.authorizeRequests().antMatchers("/**")
-                        .hasIpAddress("localhost")
-                                .and()
+                        //.hasIpAddress("localhost")
+                //.access("hasIpAddress('127.0.0.1')")
+                .permitAll()
+                .and()
                                         .addFilter(getAuthenticationFilter());
         http.headers().frameOptions().disable();
     }
