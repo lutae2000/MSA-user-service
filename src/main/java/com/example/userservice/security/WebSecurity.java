@@ -34,16 +34,15 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
         //서비스 접근시 인증된것만 허용한다
         http.authorizeRequests().antMatchers("/**")
                         //.hasIpAddress("localhost")
-                //.access("hasIpAddress('127.0.0.1')")
-                .permitAll()
+                .access("hasIpAddress('192.168.31.218')")
+                //.permitAll()
                 .and()
                                         .addFilter(getAuthenticationFilter());
         http.headers().frameOptions().disable();
     }
 
     private AuthenticationFilter getAuthenticationFilter() throws Exception{
-        AuthenticationFilter authenticationFilter = new AuthenticationFilter();
-        authenticationFilter.setAuthenticationManager(authenticationManager());
+        AuthenticationFilter authenticationFilter = new AuthenticationFilter(authenticationManager(), userService, env);
 
         return authenticationFilter;
     }
