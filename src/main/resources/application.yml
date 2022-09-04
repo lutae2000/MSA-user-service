@@ -30,6 +30,6 @@ logging:
   level:
     com.example.userservice: debug
 
-token:
-  expiration_time: 8640000
-  secret: user_token
+#token:
+#  expiration_time: 8640000
+#  secret: user_token

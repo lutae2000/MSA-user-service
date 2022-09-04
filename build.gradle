@@ -41,6 +41,10 @@ dependencies {
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: '2.7.1'
 	// https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt
 	implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
+// https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-config
+	implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-config'
+// https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-bootstrap
+	implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap'
 
 
 	compileOnly 'org.projectlombok:lombok'
