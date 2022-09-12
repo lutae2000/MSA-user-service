@@ -32,4 +32,9 @@ logging:
 
 #token:
 #  expiration_time: 8640000
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, refresh, beans, info, metric
 #  secret: user_token

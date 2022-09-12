@@ -34,6 +34,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
         //서비스 접근시 인증된것만 허용한다
         http.authorizeRequests().antMatchers("/**")
                         //.hasIpAddress("localhost")
+                //http.authorizeRequests().antMatchers("/actuator/**")
                 .access("hasIpAddress('192.168.31.218')")
                 //.permitAll()
                 .and()
