@@ -9,12 +9,16 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.modelmapper.spi.MatchingStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,11 +31,13 @@ public class UserServiceImpl implements UserService {
     UserRepository userRepository;
     BCryptPasswordEncoder passwordEncoder;
     Environment environment;
+    RestTemplate restTemplate;
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder, Environment environment) {
+    public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder, Environment environment, RestTemplate restTemplate) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.environment = environment;
+        this.restTemplate = restTemplate;
     }
 
     @Override
@@ -69,8 +75,19 @@ public class UserServiceImpl implements UserService {
 
         UserDto userDto = new ModelMapper().map(userEntity, UserDto.class);
 
-        List<ResponseOrder> orders = new ArrayList<>();
-        userDto.setOrders(orders);
+//        List<ResponseOrder> orders = new ArrayList<>();
+        //String orderURL = "http://localhost:8000/order-service/%s/orders";
+        //String.format 사용하면 파라미터에 넣을수 있음
+        String orderURL = String.format(environment.getProperty("order_service.url"), userId);
+        ResponseEntity<List<ResponseOrder>> orderListResponse = restTemplate.exchange(orderURL,
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<List<ResponseOrder>>() {
+        });
+
+        List<ResponseOrder> orderList = orderListResponse.getBody();
+
+        userDto.setOrders(orderList);
         return userDto;
     }
 
